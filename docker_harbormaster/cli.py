@@ -307,6 +307,19 @@ class App:
             }
         )
 
+        self.compose_pull_flags = configuration.get(
+            "compose_pull_flags", ("--ignore-buildable", "--ignore-pull-failures")
+        )
+        self.compose_build_flags = configuration.get(
+            "compose_build_flags", ()
+        )
+        self.compose_up_flags = configuration.get(
+            "compose_up_flags", ("--remove-orphans",)
+        )
+        self.compose_down_flags = configuration.get(
+            "compose_down_flags", ("--remove-orphans",)
+        )
+
         self.configuration_hash = hashlib.sha1(
             yaml.dump(configuration).encode("utf-8")
         ).hexdigest()
@@ -452,8 +465,7 @@ class App:
                 "compose",
                 *self.compose_config_command,
                 "pull",
-                "--ignore-buildable",
-                "--ignore-pull-failures",
+                *self.compose_pull_flags,
             ],
             self.paths.repo_dir,
             "Could not pull the Docker image",
@@ -466,6 +478,7 @@ class App:
                 "compose",
                 *self.compose_config_command,
                 "build",
+                *self.compose_build_flags,
             ],
             self.paths.repo_dir,
             "Could not build the Docker image",
@@ -477,7 +490,7 @@ class App:
             "compose",
             *self.compose_config_command,
             "up",
-            "--remove-orphans",
+            *self.compose_up_flags,
         ]
         if detach:
             command.append("--detach")
@@ -503,7 +516,7 @@ class App:
                 "compose",
                 *self.compose_config_command,
                 "down",
-                "--remove-orphans",
+                *self.compose_down_flags,
             ],
             self.paths.repo_dir,
             "Could not stop the Docker container.",
