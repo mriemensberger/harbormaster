@@ -886,6 +886,18 @@ class App:
             "Could not pull the Docker image",
         )
 
+        status = self.ev_run_command_assuming_exitcode_0(
+            [
+                "/usr/bin/env",
+                "docker",
+                "compose",
+                *self.compose_config_command,
+                "build",
+            ],
+            self.paths.repo_dir,
+            "Could not build the Docker image",
+        )
+
         command = [
             "/usr/bin/env",
             "docker",
@@ -893,7 +905,6 @@ class App:
             *self.compose_config_command,
             "up",
             "--remove-orphans",
-            "--build",
         ]
         if detach:
             command.append("--detach")
