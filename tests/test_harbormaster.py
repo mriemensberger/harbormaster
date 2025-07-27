@@ -89,7 +89,8 @@ def test_one_app(tmp_path: Path, repos: Dict[str, Repository]):
     assert output["commands"] == [
         "/usr/bin/env docker compose -f docker-compose.yml ps --services --filter status=running",
         "/usr/bin/env docker compose -f docker-compose.yml pull --ignore-buildable --ignore-pull-failures",
-        "/usr/bin/env docker compose -f docker-compose.yml up --remove-orphans --build --detach",
+        "/usr/bin/env docker compose -f docker-compose.yml build",
+        "/usr/bin/env docker compose -f docker-compose.yml up --remove-orphans --detach",
     ]
 
 
@@ -116,7 +117,8 @@ apps:
     assert output["commands"] == [
         "/usr/bin/env docker compose -f docker-compose.yml ps --services --filter status=running",
         "/usr/bin/env docker compose -f docker-compose.yml pull --ignore-buildable --ignore-pull-failures",
-        "/usr/bin/env docker compose -f docker-compose.yml up --remove-orphans --build --detach",
+        "/usr/bin/env docker compose -f docker-compose.yml build",
+        "/usr/bin/env docker compose -f docker-compose.yml up --remove-orphans --detach",
     ]
 
     repos["config"].add_files(
@@ -141,7 +143,8 @@ apps:
     assert output["commands"] == [
         "/usr/bin/env docker compose -f docker-compose.yml ps --services --filter status=running",
         "/usr/bin/env docker compose -f docker-compose.yml pull --ignore-buildable --ignore-pull-failures",
-        "/usr/bin/env docker compose -f docker-compose.yml up --remove-orphans --build --detach",
+        "/usr/bin/env docker compose -f docker-compose.yml build",
+        "/usr/bin/env docker compose -f docker-compose.yml up --remove-orphans --detach",
     ]
 
     result, output = run_harbormaster(tmp_path, repos)
